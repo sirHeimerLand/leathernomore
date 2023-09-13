@@ -18,7 +18,9 @@ namespace TradingPostMod
 		//Initializes lista and the traverse, calls for the first time the "resetitmesforsale function"
 		//this way the starting stock list has the first items. If it is not called, the original items don't add to list.
 		lista=new List<SO_TradingPost_Buyable>();
-		new TradingPost().ResetItemsForSale();
+		//next try catch will throw the mod to not load in case the function 'resetitemsforsale' throws an exception, stops the mod
+		//from load to avoid issues on gameplay.
+		try{new TradingPost().ResetItemsForSale();}catch{Debug.Log("there was an issue trying to add leather mod");return;}
 		t = Traverse.Create<TradingPost>().Field<List<SO_TradingPost_Buyable>>("startingStock");
 		leerarchivo(); //we wake up the mod calling the file that contains the items we already have registered.
 		Log("leather buy mod has ben loaded");}
@@ -97,5 +99,5 @@ namespace TradingPostMod
 		for (string linea =rd.ReadLine();linea !=null;linea =rd.ReadLine()) lineas.Add(linea);
 		rd.Close();File.WriteAllText("mods/leatherbuy/leatherpost.ltp", string.Empty);
 
-		//calls the function to add items to trading post, and create 
+		//calls the function to add items to trading post, and create
 		foreach(string linea in lineas)comandoes(linea.Split(','));}}}
